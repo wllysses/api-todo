@@ -1,16 +1,37 @@
 import { Router } from "express";
-import { TodoController } from "../controllers/TodoController";
+import { CreateTodoController } from "../controllers/CreateTodoController";
 import { Middlewares } from "../middlewares";
+import { FindAllTodosController } from "../controllers/FindAllTodosController";
+import { FindOneTodoController } from "../controllers/FindOneTodoController";
+import { UpdateTodoController } from "../controllers/UpdateTodoController";
+import { DeleteTodoController } from "../controllers/DeleteTodoController";
 
 const router = Router();
 
-const todoController = new TodoController(); // Instância da classe Controller
+const createTodoController = new CreateTodoController();
+const findAllTodosController = new FindAllTodosController();
+const findOneTodoController = new FindOneTodoController();
+const updateTodoController = new UpdateTodoController();
+const deleteTodoController = new DeleteTodoController();
 const middlewares = new Middlewares();
 
-router.post('/todos', todoController.post);
-router.get('/todos', todoController.getAll);
-router.get('/todos/:id', middlewares.verifyTodoAlReadyExistsById, todoController.getById);
-router.put('/todos/:id', middlewares.verifyTodoAlReadyExistsById, todoController.put);
-router.delete('/todos/:id', middlewares.verifyTodoAlReadyExistsById, todoController.delete);
+router.post("/todos", createTodoController.execute);
+router.get("/todos", findAllTodosController.execute);
+router.get(
+  "/todos/:id",
+  middlewares.verifyTodoAlReadyExistsById,
+  findOneTodoController.execute
+);
+router.put(
+  "/todos/:id",
+  middlewares.verifyTodoAlReadyExistsById,
+  updateTodoController.execute
+);
+
+router.delete(
+  "/todos/:id",
+  middlewares.verifyTodoAlReadyExistsById,
+  deleteTodoController.execute
+);
 
 export { router };
